@@ -1,7 +1,7 @@
 package com.sharezzorama.example.shop.cart;
 
-import com.sharezzorama.example.shop.data.cart.CartKeeper;
 import com.sharezzorama.example.shop.data.cart.CartDataSource;
+import com.sharezzorama.example.shop.data.cart.CartKeeper;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
 /**
