@@ -13,8 +13,8 @@ public class CartPresenter implements CartContract.Presenter {
     private final CartDataSource mDataSource;
     private CartContract.View mCartView;
 
-    public CartPresenter(CartKeeper cartKeeper, CartContract.View cartView) {
-        mDataSource = cartKeeper.getDataSource();
+    public CartPresenter(CartDataSource dataSource, CartContract.View cartView) {
+        mDataSource = dataSource;
         mCartView = cartView;
         cartView.setPresenter(this);
     }
@@ -43,8 +43,8 @@ public class CartPresenter implements CartContract.Presenter {
         Integer count = mDataSource.getAll().get(item);
         if (count > 1) {
             mDataSource.edit(item, count - 1);
-            mCartView.updateAll(mDataSource.getAll());
             mCartView.itemUpdated(item);
+            mCartView.updateAll(mDataSource.getAll());
         }
     }
 

@@ -34,7 +34,7 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
         mCartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCartAdapter = new CartAdapter(this);
         mCartRecyclerView.setAdapter(mCartAdapter);
-        new CartPresenter(getCartKeeper(), this);
+        new CartPresenter(getCartKeeper().getDataSource(), this);
         mPresenter.start();
     }
 

@@ -42,7 +42,7 @@ public class ItemDetailFragment extends BaseFragment implements CartContract.Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItem = (Item) getArguments().getSerializable(EXTRA_KEY_ITEM);
-        new CartPresenter(getCartKeeper(), this);
+        new CartPresenter(getCartKeeper().getDataSource(), this);
     }
 
     @Nullable
