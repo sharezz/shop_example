@@ -1,7 +1,6 @@
 package com.sharezzorama.example.shop.cart;
 
-import com.sharezzorama.example.shop.BasePresenter;
-import com.sharezzorama.example.shop.BaseView;
+import com.sharezzorama.example.shop.mvp.BaseView;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
 import java.util.Map;
@@ -12,20 +11,18 @@ import java.util.Map;
 
 public interface CartContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
 
-        void itemAdded(Item item);
+        void itemAdded(int pos);
 
-        void itemUpdated(Item item);
+        void itemUpdated(int pos);
 
-        void itemRemoved(Item item);
+        void itemRemoved(int pos);
 
-        void showAll(Map<Item, Integer> data);
-
-        void updateAll(Map<Item, Integer> data);
+        void showAll(CartLinkedHashMap data);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends com.sharezzorama.example.shop.mvp.Presenter<View> {
 
         void addOrRemove(Item item);
 
@@ -37,5 +34,27 @@ public interface CartContract {
 
         void getAll();
 
+    }
+
+    public class CartView implements View{
+        @Override
+        public void itemAdded(int pos) {
+
+        }
+
+        @Override
+        public void itemUpdated(int pos) {
+
+        }
+
+        @Override
+        public void itemRemoved(int pos) {
+
+        }
+
+        @Override
+        public void showAll(CartLinkedHashMap data) {
+
+        }
     }
 }

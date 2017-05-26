@@ -1,9 +1,7 @@
 package com.sharezzorama.example.shop.data.cart;
 
+import com.sharezzorama.example.shop.cart.CartLinkedHashMap;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by sharezzorama on 11/22/16.
@@ -11,11 +9,12 @@ import java.util.Map;
 
 public class CartSimpleDataSource implements CartDataSource {
 
-    private Map<Item, Integer> mCartMap = new HashMap<>();
+    private CartLinkedHashMap mCartMap;
 
     private static CartSimpleDataSource INSTANCE;
 
     private CartSimpleDataSource() {
+        mCartMap = new CartLinkedHashMap();
     }
 
     public static CartSimpleDataSource getInstance() {
@@ -36,17 +35,21 @@ public class CartSimpleDataSource implements CartDataSource {
     }
 
     @Override
-    public void edit(Item item, int count) {
+    public int edit(Item item, int count) {
+        int itemPosition = mCartMap.getItemPosition(item);
         mCartMap.put(item, count);
+        return itemPosition;
     }
 
     @Override
-    public void remove(Item item) {
-mCartMap.remove(item);
+    public int remove(Item item) {
+        int itemPosition = mCartMap.getItemPosition(item);
+        mCartMap.remove(item);
+        return itemPosition;
     }
 
     @Override
-    public Map<Item, Integer> getAll() {
+    public CartLinkedHashMap getAll() {
         return mCartMap;
     }
 }

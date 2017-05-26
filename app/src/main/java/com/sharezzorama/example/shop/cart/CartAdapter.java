@@ -10,19 +10,13 @@ import android.widget.TextView;
 import com.sharezzorama.example.shop.R;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by sharezzorama on 11/22/16.
  */
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
-    private Map<Item, Integer> mData;
-    private List<Item> mItems;
+    private CartLinkedHashMap mData;
     private CartItemClickListener mListener;
 
     public CartAdapter(CartItemClickListener listener) {
@@ -37,7 +31,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        final Item item = mItems.get(position);
+        final Item item = mData.getItemByPosition(position);
         final Integer count = mData.get(item);
         holder.mItemNameView.setText(item.getName());
         holder.mCountView.setText(String.valueOf(count));
@@ -68,17 +62,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return mData.size();
     }
 
-    public void updateItem(Item item) {
-        notifyItemChanged(mItems.indexOf(item));
-    }
 
-    public void removeItem(Item item) {
-        notifyItemRemoved(mItems.indexOf(item));
-    }
-
-    public void setData(Map<Item, Integer> data) {
-        mItems = new ArrayList<>(data.keySet());
-        mData = new HashMap<>(data);
+    public void setData(CartLinkedHashMap data) {
+        mData = data;
     }
 
     class CartViewHolder extends RecyclerView.ViewHolder {

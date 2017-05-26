@@ -1,5 +1,6 @@
 package com.sharezzorama.example.shop.category;
 
+import com.sharezzorama.example.shop.mvp.BasePresenter;
 import com.sharezzorama.example.shop.data.catalog.category.Category;
 import com.sharezzorama.example.shop.data.catalog.category.CategoryDataSource;
 import com.sharezzorama.example.shop.data.catalog.category.CategoryRepository;
@@ -10,14 +11,11 @@ import java.util.List;
  * Created by sharezzorama on 11/22/16.
  */
 
-public class CategoryPresenter implements CategoryContract.Presenter {
-    private CategoryContract.View mCategoryView;
+public class CategoryPresenter extends BasePresenter<CategoryContract.View> implements CategoryContract.Presenter {
     private CategoryRepository mRepository;
 
-    public CategoryPresenter(CategoryContract.View categoryView, CategoryRepository repository) {
-        mCategoryView = categoryView;
+    public CategoryPresenter( CategoryRepository repository) {
         mRepository = repository;
-        mCategoryView.setPresenter(this);
     }
 
     @Override
@@ -25,18 +23,19 @@ public class CategoryPresenter implements CategoryContract.Presenter {
         mRepository.getCategories(new CategoryDataSource.LoadCategoriesCallback() {
             @Override
             public void onItemsLoaded(List<Category> categories) {
-                mCategoryView.showCategories(categories);
+                getView().showCategories(categories);
             }
 
             @Override
             public void onDataNotAvailable() {
-                mCategoryView.showNoCategories();
+                getView().showNoCategories();
             }
         });
     }
 
+
     @Override
-    public void start() {
-        loadCategories();
+    protected Class<CategoryContract.View> getViewClass() {
+        return CategoryContract.View.class;
     }
 }

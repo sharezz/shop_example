@@ -11,7 +11,7 @@ import com.sharezzorama.example.shop.data.cart.CartKeeper;
 public class BaseActivity extends AppCompatActivity {
 
     protected CartKeeper getCartKeeper() {
-        return ((ShopApplication) getApplication()).getCartKeeper();
+        return ShopApplication.getInstance().getCartKeeper();
     }
 
 }

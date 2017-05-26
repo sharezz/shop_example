@@ -1,5 +1,6 @@
 package com.sharezzorama.example.shop.data.cart;
 
+import com.sharezzorama.example.shop.cart.CartLinkedHashMap;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
 import java.util.Map;
@@ -12,9 +13,9 @@ public interface CartDataSource {
 
     boolean add(Item item);
 
-    void edit(Item item, int count);
+    int edit(Item item, int count);
 
-    void remove(Item item);
+    int remove(Item item);
 
-    Map<Item, Integer> getAll();
+    CartLinkedHashMap getAll();
 }

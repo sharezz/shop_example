@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Disprice shop</string>
+    <string name="app_name">Shop example</string>
     <string name="no_categories">Categories not found</string>
     <string name="add_to_cart_button_text">Add to cart</string>
     <string name="remove_from_cart_button_text">Remove from cart</string>
@@ -7,4 +7,6 @@
     <string name="action_open_cart">Open cart</string>
     <string name="activity_cart_title">Cart</string>
     <string name="cart_empty_view_text">Cart is empty</string>
+    <string name="select_category">Select category</string>
+    <string name="currency_usd">$ %.2f</string>
 </resources>

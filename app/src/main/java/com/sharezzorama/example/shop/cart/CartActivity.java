@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.sharezzorama.example.shop.BaseActivity;
 import com.sharezzorama.example.shop.R;
+import com.sharezzorama.example.shop.ShopApplication;
+import com.sharezzorama.example.shop.data.cart.CartKeeper;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
 import java.util.Map;
@@ -34,8 +36,7 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
         mCartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCartAdapter = new CartAdapter(this);
         mCartRecyclerView.setAdapter(mCartAdapter);
-        new CartPresenter(getCartKeeper().getDataSource(), this);
-        mPresenter.start();
+        mPresenter = ShopApplication.getInstance().getCartPresenter();
     }
 
     @Override
@@ -54,36 +55,26 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
     }
 
     @Override
-    public void itemAdded(Item item) {
+    public void itemAdded(int pos) {
 
     }
 
     @Override
-    public void itemUpdated(Item item) {
-        mCartAdapter.updateItem(item);
+    public void itemUpdated(int pos) {
+        mCartAdapter.notifyItemChanged(pos);
     }
 
     @Override
-    public void itemRemoved(Item item) {
-        mCartAdapter.removeItem(item);
+    public void itemRemoved(int pos) {
+        mCartAdapter.notifyItemRemoved(pos);
         updateEmptyView();
     }
 
     @Override
-    public void showAll(Map<Item, Integer> data) {
+    public void showAll(CartLinkedHashMap data) {
         mCartAdapter.setData(data);
         mCartAdapter.notifyDataSetChanged();
         updateEmptyView();
-    }
-
-    @Override
-    public void updateAll(Map<Item, Integer> data) {
-        mCartAdapter.setData(data);
-    }
-
-    @Override
-    public void setPresenter(CartContract.Presenter presenter) {
-        mPresenter = presenter;
     }
 
     @Override
@@ -99,5 +90,18 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
 
     private void updateEmptyView() {
         mEmptyView.setVisibility(mCartAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.attachView(this);
+        mPresenter.getAll();
+    }
+
+    @Override
+    protected void onStop() {
+        mPresenter.detachView(this);
+        super.onStop();
     }
 }

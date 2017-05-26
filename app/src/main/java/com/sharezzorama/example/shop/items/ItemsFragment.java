@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.sharezzorama.example.shop.BaseFragment;
 import com.sharezzorama.example.shop.MainActivity;
 import com.sharezzorama.example.shop.R;
+import com.sharezzorama.example.shop.ShopApplication;
 import com.sharezzorama.example.shop.data.catalog.category.Category;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 import com.sharezzorama.example.shop.data.catalog.item.ItemRepository;
@@ -48,9 +49,7 @@ public class ItemsFragment extends BaseFragment implements ItemContract.View,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategory = (Category) getArguments().getSerializable(EXTRA_KEY_CATEGORY);
-        new ItemsPresenter(ItemRepository.getInstance(ItemFakeExternalDataSource.getInstance(), ItemLocalDataSource.getInstance(getContext())),
-                this,
-                mCategory.getCategoryId());
+        mPresenter = ShopApplication.getInstance().getItemPresenter(mCategory.getCategoryId());
     }
 
     @Override
@@ -69,7 +68,6 @@ public class ItemsFragment extends BaseFragment implements ItemContract.View,
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.start();
     }
 
     @Override
@@ -83,8 +81,16 @@ public class ItemsFragment extends BaseFragment implements ItemContract.View,
     }
 
     @Override
-    public void setPresenter(ItemContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void onStart() {
+        super.onStart();
+        mPresenter.attachView(this);
+        mPresenter.loadItems();
+    }
+
+    @Override
+    public void onStop() {
+        mPresenter.detachView(this);
+        super.onStop();
     }
 
     @Override

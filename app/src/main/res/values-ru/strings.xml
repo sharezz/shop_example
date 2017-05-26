@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Пример магазина</string>
+    <string name="no_categories">Категории не найдены</string>
+    <string name="add_to_cart_button_text">Добавить в корзину</string>
+    <string name="remove_from_cart_button_text">Удалить из корзины</string>
+    <string name="no_items">Элементы не найдены</string>
+    <string name="action_open_cart">Открыть корзину</string>
+    <string name="activity_cart_title">Корзина</string>
+    <string name="cart_empty_view_text">Корзина пуста</string>
+</resources>

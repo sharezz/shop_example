@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_middle">
 
     <ImageView
         android:id="@+id/deleteButton"
@@ -14,11 +16,13 @@
         android:src="@drawable/ic_delete" />
 
     <TextView
+        style="@style/Base.TextAppearance.AppCompat.Small"
         android:id="@+id/itemName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        tools:text="Item name" />
+        tools:text="Item name"
+        android:textColor="@android:color/black"/>
 
     <Button
         android:id="@+id/minusButton"

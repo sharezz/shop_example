@@ -1,5 +1,6 @@
 package com.sharezzorama.example.shop.items;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +33,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
+        Context context = holder.itemView.getContext();
         final Item item = mItems.get(position);
         holder.mItemNameView.setText(item.getName());
-        holder.mItemPriceView.setText(String.format("%.2f", item.getPrice()));
+        holder.mItemPriceView.setText(context.getString(R.string.currency_usd, item.getPrice()));
         if (mItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

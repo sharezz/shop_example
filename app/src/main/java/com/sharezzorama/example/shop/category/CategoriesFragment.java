@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.sharezzorama.example.shop.BaseFragment;
 import com.sharezzorama.example.shop.MainActivity;
 import com.sharezzorama.example.shop.R;
+import com.sharezzorama.example.shop.ShopApplication;
 import com.sharezzorama.example.shop.data.catalog.category.Category;
 import com.sharezzorama.example.shop.data.catalog.category.CategoryRepository;
 import com.sharezzorama.example.shop.data.catalog.category.external.CategoryFakeExternalDataSource;
@@ -32,7 +33,7 @@ public class CategoriesFragment extends BaseFragment implements CategoryContract
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new CategoryPresenter(this, CategoryRepository.getInstance(CategoryFakeExternalDataSource.getInstance(), CategoryLocalDataSource.getInstance(getContext())));
+        mPresenter = ShopApplication.getInstance().getCategoryPresenter();
     }
 
     @Override
@@ -49,7 +50,6 @@ public class CategoriesFragment extends BaseFragment implements CategoryContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.start();
     }
 
     @Override
@@ -62,13 +62,22 @@ public class CategoriesFragment extends BaseFragment implements CategoryContract
         Toast.makeText(getContext(), R.string.no_categories, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void setPresenter(CategoryContract.Presenter presenter) {
-        mPresenter = presenter;
-    }
 
     @Override
     public void onCategoryClick(Category category) {
         ((MainActivity) getActivity()).switchContent(ItemsFragment.newInstance(category), false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.attachView(this);
+        mPresenter.loadCategories();
+    }
+
+    @Override
+    public void onStop() {
+        mPresenter.detachView(this);
+        super.onStop();
     }
 }

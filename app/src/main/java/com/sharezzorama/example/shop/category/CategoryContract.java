@@ -1,7 +1,6 @@
 package com.sharezzorama.example.shop.category;
 
-import com.sharezzorama.example.shop.BasePresenter;
-import com.sharezzorama.example.shop.BaseView;
+import com.sharezzorama.example.shop.mvp.BaseView;
 import com.sharezzorama.example.shop.data.catalog.category.Category;
 
 import java.util.List;
@@ -12,14 +11,14 @@ import java.util.List;
 
 public interface CategoryContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
 
         void showCategories(List<Category> categories);
 
         void showNoCategories();
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends com.sharezzorama.example.shop.mvp.Presenter<View> {
 
         void loadCategories();
 

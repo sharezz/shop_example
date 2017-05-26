@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import com.sharezzorama.example.shop.BaseFragment;
 import com.sharezzorama.example.shop.R;
+import com.sharezzorama.example.shop.ShopApplication;
 import com.sharezzorama.example.shop.cart.CartContract;
+import com.sharezzorama.example.shop.cart.CartLinkedHashMap;
 import com.sharezzorama.example.shop.cart.CartPresenter;
+import com.sharezzorama.example.shop.category.CategoryContract;
 import com.sharezzorama.example.shop.data.catalog.item.Item;
 
 import java.util.Map;
@@ -20,7 +23,7 @@ import java.util.Map;
  * Created by sharezzorama on 11/22/16.
  */
 
-public class ItemDetailFragment extends BaseFragment implements CartContract.View {
+public class ItemDetailFragment extends BaseFragment {
     private static final String EXTRA_KEY_ITEM = "ItemDetailFragment.EXTRA_KEY_ITEM";
     private Item mItem;
 
@@ -29,6 +32,22 @@ public class ItemDetailFragment extends BaseFragment implements CartContract.Vie
     private TextView mPriceView;
     private Button mCartButton;
     private CartContract.Presenter mPresenter;
+    private CartContract.View mCartView = new CartContract.CartView() {
+        @Override
+        public void itemAdded(int pos) {
+            updateCartButton(true);
+        }
+
+        @Override
+        public void itemRemoved(int pos) {
+            updateCartButton(false);
+        }
+
+        @Override
+        public void showAll(CartLinkedHashMap data) {
+            updateCartButton(data.containsKey(mItem));
+        }
+    };
 
     public static ItemDetailFragment newInstance(Item item) {
         ItemDetailFragment fragment = new ItemDetailFragment();
@@ -42,7 +61,7 @@ public class ItemDetailFragment extends BaseFragment implements CartContract.Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItem = (Item) getArguments().getSerializable(EXTRA_KEY_ITEM);
-        new CartPresenter(getCartKeeper().getDataSource(), this);
+        mPresenter = ShopApplication.getInstance().getCartPresenter();
     }
 
     @Nullable
@@ -56,7 +75,7 @@ public class ItemDetailFragment extends BaseFragment implements CartContract.Vie
 
         mNameView.setText(mItem.getName());
         mDescriptionView.setText(mItem.getDescription());
-        mPriceView.setText(String.valueOf(mItem.getPrice()));
+        mPriceView.setText(getString(R.string.currency_usd, mItem.getPrice()));
         mCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,40 +88,17 @@ public class ItemDetailFragment extends BaseFragment implements CartContract.Vie
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+        mPresenter.attachView(mCartView);
+        mPresenter.getAll();
+    }
+
+    @Override
+    public void onPause() {
+        mPresenter.detachView(mCartView);
+        super.onPause();
     }
 
     private void updateCartButton(boolean itemInCart) {
         mCartButton.setText(itemInCart ? R.string.remove_from_cart_button_text : R.string.add_to_cart_button_text);
-    }
-
-    @Override
-    public void itemAdded(Item item) {
-        updateCartButton(true);
-    }
-
-    @Override
-    public void itemUpdated(Item item) {
-
-    }
-
-    @Override
-    public void itemRemoved(Item item) {
-        updateCartButton(false);
-    }
-
-    @Override
-    public void showAll(Map<Item, Integer> data) {
-        updateCartButton(data.containsKey(mItem));
-    }
-
-    @Override
-    public void updateAll(Map<Item, Integer> data) {
-
-    }
-
-    @Override
-    public void setPresenter(CartContract.Presenter presenter) {
-        mPresenter = presenter;
     }
 }
